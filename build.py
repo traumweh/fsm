@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os, time, sys, shutil
+import os, time, sys, shutil, subprocess
 
 def sources():
 	path = './src/'
@@ -29,11 +29,18 @@ def deploy():
 	path = './www/'
 	def move(file):
 		shutil.copy(path+file)
+
+	subprocess.call("git add .; git commit -am \"deploying\"; git push)")
+	subprocess.call("git co gh-pages")
+
 	move('fsm.js')
 	move('index.html')
 	for obj in os.listdir('./'):
 		if (os.path.isdir(obj) && obj != '.git'):
 			shutil.rmtree(obj)
+
+	subprocess.call('git add .; git commit -am \"deploying\"; git push')
+	subprocess.call('git co master')
 
 if __name__ == '__main__':
 	build()
