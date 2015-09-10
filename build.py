@@ -35,7 +35,7 @@ def deploy():
 
 	path = './www/'
 	def move(file):
-		shutil.copy(path+file)
+		shutil.copy(path+file, './'+file)
 
 	move('fsm.js')
 	move('index.html')
