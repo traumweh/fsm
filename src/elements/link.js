@@ -1,8 +1,10 @@
-function Link(a, b) {
+function Link(a, b, directed) {
 	this.nodeA = a;
 	this.nodeB = b;
 	this.text = '';
 	this.lineAngleAdjust = 0; // value to add to textAngle when link is straight line
+
+	this.directed = directed;
 
 	// make anchor point relative to the locations of nodeA and nodeB
 	this.parallelPart = 0.5; // percentage from nodeA to nodeB
@@ -83,12 +85,16 @@ Link.prototype.draw = function(c) {
 		c.lineTo(stuff.endX, stuff.endY);
 	}
 	c.stroke();
+	
 	// draw the head of the arrow
-	if(stuff.hasCircle) {
-		drawArrow(c, stuff.endX, stuff.endY, stuff.endAngle - stuff.reverseScale * (Math.PI / 2));
-	} else {
-		drawArrow(c, stuff.endX, stuff.endY, Math.atan2(stuff.endY - stuff.startY, stuff.endX - stuff.startX));
+	if (this.directed) {
+		if(stuff.hasCircle) {
+			drawArrow(c, stuff.endX, stuff.endY, stuff.endAngle - stuff.reverseScale * (Math.PI / 2));
+		} else {
+			drawArrow(c, stuff.endX, stuff.endY, Math.atan2(stuff.endY - stuff.startY, stuff.endX - stuff.startX));
+		}
 	}
+
 	// draw the text
 	if(stuff.hasCircle) {
 		var startAngle = stuff.startAngle;

@@ -158,6 +158,14 @@ function snapNode(node) {
 		}
 	}
 }
+/*
+ Return true if the user has directed edges on, false otherwise.
+ */
+function checkDirected() {
+	var val = document.getElementById('directed').checked;
+	console.log("CHECKED: " + val);
+	return val;
+};
 
 window.onload = function() {
 	canvas = document.getElementById('canvas');
@@ -231,7 +239,7 @@ window.onload = function() {
 				if(targetNode == selectedObject) {
 					currentLink = new SelfLink(selectedObject, mouse);
 				} else if(targetNode != null) {
-					currentLink = new Link(selectedObject, targetNode);
+					currentLink = new Link(selectedObject, targetNode, checkDirected());
 				} else {
 					currentLink = new TemporaryLink(selectedObject.closestPointOnCircle(mouse.x, mouse.y), mouse);
 				}

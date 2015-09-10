@@ -143,17 +143,11 @@ if (typeof btoa == 'undefined') {
 
 	</script>
 </head><body>
-	<h1>Finite State Machine Designer</h1>
-	<div class = "center">
-		Directed Edges: 
-		<div class="onoffswitch">
-    	<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="directed" checked>
-	    <label class="onoffswitch-label" for="myonoffswitch">
-	        <span class="onoffswitch-inner"></span>
-	        <span class="onoffswitch-switch"></span>
-	    </label>
-		</div>
-	</div>
+	<h1>Graph / Finite State Machine Designer</h1>
+	<p>Based on the FSM machine <a href="http://madebyevan.com/fsm/">here</a>.
+    <div class="center">
+    	<input type="checkbox" id="directed" checked> Directed Edges? 
+    </div>
 	<canvas id="canvas" width="800" height="600">
 		<span class="error">Your browser does not support<br>the HTML5 &lt;canvas&gt; element</span>
 	</canvas>

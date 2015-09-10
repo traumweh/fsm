@@ -11,5 +11,7 @@ TemporaryLink.prototype.draw = function(c) {
 	c.stroke();
 
 	// draw the head of the arrow
-	drawArrow(c, this.to.x, this.to.y, Math.atan2(this.to.y - this.from.y, this.to.x - this.from.x));
+	if (checkDirected()){
+		drawArrow(c, this.to.x, this.to.y, Math.atan2(this.to.y - this.from.y, this.to.x - this.from.x));
+	}
 };
