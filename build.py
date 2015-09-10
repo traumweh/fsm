@@ -1,10 +1,6 @@
 #!/usr/bin/python
 
-import os, time, sys, shutil, subprocess
-import git
-
-join = os.path.join
-repo = Repo(self.rorepo.working_tree_dir)
+import os, time, sys, shutil
 
 def sources():
 	path = './src/'
