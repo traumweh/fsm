@@ -180,7 +180,7 @@ window.onload = function() {
 
 		if(selectedObject != null) {
 			if(shift && selectedObject instanceof Node) {
-				currentLink = new SelfLink(selectedObject, mouse);
+				currentLink = new SelfLink(selectedObject, mouse, checkDirected());
 			} else {
 				movingObject = true;
 				deltaMouseX = deltaMouseY = 0;
@@ -190,7 +190,7 @@ window.onload = function() {
 			}
 			resetCaret();
 		} else if(shift) {
-			currentLink = new TemporaryLink(mouse, mouse);
+			currentLink = new TemporaryLink(mouse, mouse, checkDirected());
 		}
 
 		draw();
@@ -231,17 +231,17 @@ window.onload = function() {
 
 			if(selectedObject == null) {
 				if(targetNode != null) {
-					currentLink = new StartLink(targetNode, originalClick);
+					currentLink = new StartLink(targetNode, originalClick, checkDirected());
 				} else {
-					currentLink = new TemporaryLink(originalClick, mouse);
+					currentLink = new TemporaryLink(originalClick, mouse, checkDirected());
 				}
 			} else {
 				if(targetNode == selectedObject) {
-					currentLink = new SelfLink(selectedObject, mouse);
+					currentLink = new SelfLink(selectedObject, mouse, checkDirected());
 				} else if(targetNode != null) {
 					currentLink = new Link(selectedObject, targetNode, checkDirected());
 				} else {
-					currentLink = new TemporaryLink(selectedObject.closestPointOnCircle(mouse.x, mouse.y), mouse);
+					currentLink = new TemporaryLink(selectedObject.closestPointOnCircle(mouse.x, mouse.y), mouse, checkDirected());
 				}
 			}
 			draw();

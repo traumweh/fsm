@@ -1,8 +1,10 @@
-function StartLink(node, start) {
+function StartLink(node, start, directed) {
 	this.node = node;
 	this.deltaX = 0;
 	this.deltaY = 0;
 	this.text = '';
+
+	this.directed = directed;
 
 	if(start) {
 		this.setAnchorPoint(start.x, start.y);
@@ -48,7 +50,9 @@ StartLink.prototype.draw = function(c) {
 	drawText(c, this.text, stuff.startX, stuff.startY, textAngle, selectedObject == this);
 
 	// draw the head of the arrow
-	drawArrow(c, stuff.endX, stuff.endY, Math.atan2(-this.deltaY, -this.deltaX));
+	if (this.directed) {
+			drawArrow(c, stuff.endX, stuff.endY, Math.atan2(-this.deltaY, -this.deltaX));
+	}
 };
 
 StartLink.prototype.containsPoint = function(x, y) {

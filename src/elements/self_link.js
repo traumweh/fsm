@@ -1,8 +1,10 @@
-function SelfLink(node, mouse) {
+function SelfLink(node, mouse, directed) {
 	this.node = node;
 	this.anchorAngle = 0;
 	this.mouseOffsetAngle = 0;
 	this.text = '';
+
+	this.directed = directed;
 
 	if(mouse) {
 		this.setAnchorPoint(mouse.x, mouse.y);
@@ -58,7 +60,9 @@ SelfLink.prototype.draw = function(c) {
 	var textY = stuff.circleY + stuff.circleRadius * Math.sin(this.anchorAngle);
 	drawText(c, this.text, textX, textY, this.anchorAngle, selectedObject == this);
 	// draw the head of the arrow
-	drawArrow(c, stuff.endX, stuff.endY, stuff.endAngle + Math.PI * 0.4);
+	if (this.directed) {
+		drawArrow(c, stuff.endX, stuff.endY, stuff.endAngle + Math.PI * 0.4);
+	}
 };
 
 SelfLink.prototype.containsPoint = function(x, y) {
