@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os, time, sys
+import os, time, sys, shutil
 
 def sources():
 	path = './src/'
@@ -25,7 +25,19 @@ def monitor():
 			a = b
 			build()
 
+def deploy():
+	path = './www/'
+	def move(file):
+		shutil.copy(path+file)
+	move('fsm.js')
+	move('index.html')
+	for obj in os.listdir('./'):
+		if (os.path.isdir(obj) && obj != '.git'):
+			shutil.rmtree(obj)
+
 if __name__ == '__main__':
 	build()
 	if '--watch' in sys.argv:
 		monitor()
+	if '--deploy' in sys.argv:
+		deploy()
