@@ -36,7 +36,7 @@ def deploy():
 	move('fsm.js')
 	move('index.html')
 	for obj in os.listdir('./'):
-		if (os.path.isdir(obj) && obj != '.git'):
+		if (os.path.isdir(obj) and obj != '.git'):
 			shutil.rmtree(obj)
 
 	subprocess.call('git add .; git commit -am \"deploying\"; git push')
