@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
 import os, time, sys, shutil, subprocess
+import git
+
+join = os.path.join
+repo = Repo(self.rorepo.working_tree_dir)
 
 def sources():
 	path = './src/'
@@ -26,21 +30,23 @@ def monitor():
 			build()
 
 def deploy():
+
+	print "ARE YOU ON THE RIGHT BRANCH? [y/n]"
+	answer = raw_input()
+	
+	if answer != 'y':
+		return
+
 	path = './www/'
 	def move(file):
 		shutil.copy(path+file)
 
-	subprocess.call("git add .; git commit -am \"deploying\"; git push)")
-	subprocess.call("git co gh-pages")
-
 	move('fsm.js')
 	move('index.html')
 	for obj in os.listdir('./'):
-		if (os.path.isdir(obj) and obj != '.git'):
+		if (os.path.isdir(obj) and obj != '.git'): 
 			shutil.rmtree(obj)
 
-	subprocess.call('git add .; git commit -am \"deploying\"; git push')
-	subprocess.call('git co master')
 
 if __name__ == '__main__':
 	build()
