@@ -43,6 +43,7 @@ def deploy():
 		if (os.path.isdir(obj) and obj != '.git'): 
 			shutil.rmtree(obj)
 
+	os.remove('./build.py')
 
 if __name__ == '__main__':
 	build()
