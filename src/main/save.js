@@ -6,6 +6,8 @@ function restoreBackup() {
 	try {
 		var backup = JSON.parse(localStorage['fsm']);
 
+		var directed = backup.directed;
+
 		for(var i = 0; i < backup.nodes.length; i++) {
 			var backupNode = backup.nodes[i];
 			var node = new Node(backupNode.x, backupNode.y);
@@ -17,16 +19,16 @@ function restoreBackup() {
 			var backupLink = backup.links[i];
 			var link = null;
 			if(backupLink.type == 'SelfLink') {
-				link = new SelfLink(nodes[backupLink.node]);
+				link = new SelfLink(nodes[backupLink.node], directed);
 				link.anchorAngle = backupLink.anchorAngle;
 				link.text = backupLink.text;
 			} else if(backupLink.type == 'StartLink') {
-				link = new StartLink(nodes[backupLink.node]);
+				link = new StartLink(nodes[backupLink.node], directed);
 				link.deltaX = backupLink.deltaX;
 				link.deltaY = backupLink.deltaY;
 				link.text = backupLink.text;
 			} else if(backupLink.type == 'Link') {
-				link = new Link(nodes[backupLink.nodeA], nodes[backupLink.nodeB]);
+				link = new Link(nodes[backupLink.nodeA], nodes[backupLink.nodeB], directed);
 				link.parallelPart = backupLink.parallelPart;
 				link.perpendicularPart = backupLink.perpendicularPart;
 				link.text = backupLink.text;
@@ -49,6 +51,7 @@ function saveBackup() {
 	var backup = {
 		'nodes': [],
 		'links': [],
+		'directed': checkDirected()
 	};
 	for(var i = 0; i < nodes.length; i++) {
 		var node = nodes[i];
