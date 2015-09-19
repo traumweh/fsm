@@ -1,5 +1,13 @@
 var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega' ];
 
+/*
+ Return true if the user has directed edges on, false otherwise.
+ */
+function checkDirected() {
+	var val = document.getElementById('directed').checked;
+	return val;
+};
+
 function convertLatexShortcuts(text) {
 	// html greek characters
 	for(var i = 0; i < greekLetterNames.length; i++) {
@@ -158,14 +166,6 @@ function snapNode(node) {
 		}
 	}
 }
-/*
- Return true if the user has directed edges on, false otherwise.
- */
-function checkDirected() {
-	var val = document.getElementById('directed').checked;
-	console.log("CHECKED: " + val);
-	return val;
-};
 
 window.onload = function() {
 	canvas = document.getElementById('canvas');

@@ -591,6 +591,14 @@ function ExportAsSVG() {
 
 var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega' ];
 
+/*
+ Return true if the user has directed edges on, false otherwise.
+ */
+function checkDirected() {
+	var val = document.getElementById('directed').checked;
+	return val;
+};
+
 function convertLatexShortcuts(text) {
 	// html greek characters
 	for(var i = 0; i < greekLetterNames.length; i++) {
@@ -749,14 +757,6 @@ function snapNode(node) {
 		}
 	}
 }
-/*
- Return true if the user has directed edges on, false otherwise.
- */
-function checkDirected() {
-	var val = document.getElementById('directed').checked;
-	console.log("CHECKED: " + val);
-	return val;
-};
 
 window.onload = function() {
 	canvas = document.getElementById('canvas');
@@ -1025,8 +1025,6 @@ function restoreBackup() {
 	try {
 		var backup = JSON.parse(localStorage['fsm']);
 
-		var directed = backup.directed;
-
 		for(var i = 0; i < backup.nodes.length; i++) {
 			var backupNode = backup.nodes[i];
 			var node = new Node(backupNode.x, backupNode.y);
@@ -1070,8 +1068,8 @@ function saveBackup() {
 	var backup = {
 		'nodes': [],
 		'links': [],
-		'directed': checkDirected()
 	};
+
 	for(var i = 0; i < nodes.length; i++) {
 		var node = nodes[i];
 		var backupNode = {
