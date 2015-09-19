@@ -599,6 +599,7 @@ function checkDirected() {
 	return val;
 };
 
+
 function convertLatexShortcuts(text) {
 	// html greek characters
 	for(var i = 0; i < greekLetterNames.length; i++) {
@@ -759,6 +760,13 @@ function snapNode(node) {
 }
 
 window.onload = function() {
+
+	document.getElementById("clearCanvas").onclick = 
+	function(){
+		localStorage['fsm'] = ''
+		location.reload()
+	};
+
 	canvas = document.getElementById('canvas');
 	restoreBackup();
 	draw();
