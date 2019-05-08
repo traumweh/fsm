@@ -275,6 +275,13 @@ window.onload = function() {
 		location.reload();
 	};
 
+	document.getElementById("clearNodes").onclick = function() {
+		for(var i = 0; i < nodes.length; i++) {
+			nodes[i].text = '';
+		}
+		draw();
+	};
+
 	document.getElementById('importButton').onclick = function() {
 		var element = document.getElementById('output');
 		localStorage['fsm'] = element.value;
