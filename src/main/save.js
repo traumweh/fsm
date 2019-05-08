@@ -16,12 +16,13 @@ function restoreBackup() {
 		for(var i = 0; i < backup.links.length; i++) {
 			var backupLink = backup.links[i];
 			var link = null;
+			var directed = backupLink.directed;
 			if(backupLink.type == 'SelfLink') {
-				link = new SelfLink(nodes[backupLink.node], directed);
+				link = new SelfLink(nodes[backupLink.node], undefined, directed);
 				link.anchorAngle = backupLink.anchorAngle;
 				link.text = backupLink.text;
 			} else if(backupLink.type == 'StartLink') {
-				link = new StartLink(nodes[backupLink.node], directed);
+				link = new StartLink(nodes[backupLink.node], undefined, directed);
 				link.deltaX = backupLink.deltaX;
 				link.deltaY = backupLink.deltaY;
 				link.text = backupLink.text;
@@ -70,6 +71,7 @@ function saveBackup() {
 				'node': nodes.indexOf(link.node),
 				'text': link.text,
 				'anchorAngle': link.anchorAngle,
+				'directed': link.directed,
 			};
 		} else if(link instanceof StartLink) {
 			backupLink = {
@@ -78,6 +80,7 @@ function saveBackup() {
 				'text': link.text,
 				'deltaX': link.deltaX,
 				'deltaY': link.deltaY,
+				'directed': link.directed,
 			};
 		} else if(link instanceof Link) {
 			backupLink = {
@@ -88,6 +91,7 @@ function saveBackup() {
 				'lineAngleAdjust': link.lineAngleAdjust,
 				'parallelPart': link.parallelPart,
 				'perpendicularPart': link.perpendicularPart,
+				'directed': link.directed,
 			};
 		}
 		if(backupLink != null) {
