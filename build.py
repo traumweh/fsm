@@ -11,7 +11,7 @@ def build():
 	data = '\n'.join(open(file, 'r').read() for file in sources())
 	with open(path, 'w') as f:
 		f.write(data)
-	print 'built %s (%u bytes)' % (path, len(data))
+	print('built %s (%u bytes)' % (path, len(data)))
 
 def stat():
 	return [os.stat(file).st_mtime for file in sources()]
@@ -27,8 +27,8 @@ def monitor():
 
 def deploy():
 
-	print "ARE YOU ON THE RIGHT BRANCH? [y/n]"
-	answer = raw_input()
+	print("ARE YOU ON THE RIGHT BRANCH? [y/n]")
+	answer = input()
 	
 	if answer != 'y':
 		return
