@@ -176,6 +176,12 @@ window.onload = function() {
 		location.reload()
 	};
 
+	document.getElementById('importButton').onclick = function() {
+		var element = document.getElementById('output');
+		localStorage['fsm'] = element.value;
+		location.reload();
+	};
+
 	canvas = document.getElementById('canvas');
 	restoreBackup();
 	draw();
@@ -377,10 +383,11 @@ function crossBrowserRelativeMousePos(e) {
 	};
 }
 
-function output(text) {
+function output(text, showInput) {
 	var element = document.getElementById('output');
 	element.style.display = 'block';
 	element.value = text;
+	setInputButtonHidden(!showInput);
 }
 
 function saveAsPNG() {
@@ -412,4 +419,21 @@ function saveAsLaTeX() {
 	selectedObject = oldSelectedObject;
 	var texData = exporter.toLaTeX();
 	output(texData);
+}
+
+function saveAsJSON() {
+	if(!JSON) {
+		return;
+	}
+	var backup = backupData();
+	output(JSON.stringify(backup));
+}
+
+function setInputButtonHidden(isHidden) {
+	var importButton = document.getElementById('importButton');
+	importButton.hidden = isHidden;
+}
+
+function loadFromJSON() {
+	output('', true);
 }

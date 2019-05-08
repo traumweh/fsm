@@ -51,6 +51,10 @@ p {
 	text-align: center;
 }
 
+.centerelement {
+	margin: auto;
+}
+
 textarea {
 	display: none;
 	width: 75%;
@@ -154,8 +158,9 @@ if (typeof btoa == 'undefined') {
 		<span class="error">Your browser does not support<br>the HTML5 &lt;canvas&gt; element</span>
 	</canvas>
 	<div>
-		<p class="center">Export as: <a href="javascript:saveAsPNG()">PNG</a> | <a href="javascript:saveAsSVG()">SVG</a> | <a href="javascript:saveAsLaTeX()">LaTeX</a></p>
+		<p class="center">Export as: <a href="javascript:saveAsJSON()">JSON</a> | <a href="javascript:saveAsPNG()">PNG</a> | <a href="javascript:saveAsSVG()">SVG</a> | <a href="javascript:saveAsLaTeX()">LaTeX</a> | Import from: <a href="javascript:loadFromJSON()">JSON</a> </p>
 		<textarea id="output"></textarea>
+		<p class="center"><button id="importButton" hidden>Import</button></p>
 		<p>The big white box above is the FSM designer.&nbsp; Here's how to use it:</p>
 		<ul>
 			<li><b>Add a state:</b> double-click on the canvas</li>
@@ -171,7 +176,7 @@ if (typeof btoa == 'undefined') {
 	</div>
 		<p>Based on the FSM machine <a href="http://sa.muel.green/fsm/">here</a> and <a href="http://madebyevan.com/fsm/">here</a>.
 			
-	<p>Update by <a href="http://markusfeng.com/">Markus Feng</a> in 2019</p>
+	<p>Update by <a href="https://markusfeng.com">Markus Feng</a> in 2019</p>
 	<p>Update by <a href="http://samuelgreen.org/">Samuel Green</a> in 2015</p>
 	<p>Original by <a href="http://madebyevan.com/">Evan Wallace</a> in 2010</p>
 </body></html>

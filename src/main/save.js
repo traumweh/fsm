@@ -42,10 +42,7 @@ function restoreBackup() {
 	}
 }
 
-function saveBackup() {
-	if(!localStorage || !JSON) {
-		return;
-	}
+function backupData() {
 
 	var backup = {
 		'nodes': [],
@@ -98,6 +95,16 @@ function saveBackup() {
 			backup.links.push(backupLink);
 		}
 	}
+
+	return backup;
+}
+
+function saveBackup() {
+	if(!localStorage || !JSON) {
+		return;
+	}
+
+	var backup = backupData();
 
 	localStorage['fsm'] = JSON.stringify(backup);
 }
