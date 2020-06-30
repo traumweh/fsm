@@ -18,19 +18,37 @@ Node.prototype.setAnchorPoint = function(x, y) {
 };
 
 Node.prototype.draw = function(c) {
-	// draw the circle
-	c.beginPath();
-	c.arc(this.x, this.y, nodeRadius, 0, 2 * Math.PI, false);
-	c.stroke();
-
-	// draw the text
-	drawText(c, this.text, this.x, this.y, null, selectedObject == this);
-
-	// draw a double circle for an accept state
-	if(this.isAcceptState) {
+	if (!document.getElementById('rectorcirc').checked) {
+		// draw the circle
 		c.beginPath();
-		c.arc(this.x, this.y, nodeRadius - 6, 0, 2 * Math.PI, false);
+		c.arc(this.x, this.y, nodeRadius, 0, 2 * Math.PI, false);
+
 		c.stroke();
+	
+		// draw the text
+		drawText(c, this.text, this.x, this.y, null, selectedObject == this);
+	
+		// draw a double circle for an accept state
+		if (this.isAcceptState) {
+			c.beginPath();
+			c.arc(this.x, this.y, nodeRadius - 6, 0, 2 * Math.PI, false);
+			c.stroke();
+		}
+	} else {
+		// draw the box
+		c.beginPath();
+		c.rect(this.x - nodeRadius, this.y - nodeRadius, nodeRadius * 2, nodeRadius * 2);
+		c.stroke();
+		
+		// draw the text
+		drawText(c, this.text, this.x, this.y, null, selectedObject == this);
+		
+		// draw a double box for an accept state
+		if (this.isAcceptState) {
+			c.beginPath();
+			c.rect(this.x - nodeRadius + 6, this.y - nodeRadius + 6, (nodeRadius - 6) * 2, (nodeRadius - 6) * 2);
+			c.stroke();
+		}
 	}
 };
 

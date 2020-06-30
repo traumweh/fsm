@@ -37,6 +37,9 @@ function restoreBackup() {
 				links.push(link);
 			}
 		}
+		document.getElementById('canvaswidth').value = backup['settings']['width'];
+		document.getElementById('canvasheight').value = backup['settings']['height'];
+		document.getElementById('rangeSlider').value = backup['settings']['nodesize'];
 	} catch(e) {
 		localStorage['fsm'] = '';
 	}
@@ -47,6 +50,7 @@ function backupData() {
 	var backup = {
 		'nodes': [],
 		'links': [],
+		'settings':  {'width': document.getElementById('canvaswidth').value, 'height': document.getElementById('canvasheight').value, 'nodesize': document.getElementById('rangeSlider').value},
 	};
 
 	for(var i = 0; i < nodes.length; i++) {

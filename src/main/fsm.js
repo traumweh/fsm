@@ -1,4 +1,4 @@
-var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega', 'Rightarrow', 'rightarrow', 'Leftarrow', 'leftarrow', 'plus', 'circ', 'cup', 'cap', 'emptyset'];
+var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega', 'Rightarrow', 'rightarrow', 'Leftarrow', 'leftarrow', 'plus', 'circ', 'cup', 'cap', 'emptyset', 'blank', 'mark'];
 
 /*
  Return true if the user has directed edges on, false otherwise.
@@ -46,6 +46,15 @@ function convertLatexShortcuts(text) {
 		}
 		if (name == "emptyset") {
 			text = text.replace(new RegExp('\\\\' + name, 'g'), String.fromCharCode(8709));
+			continue;
+		}
+		if (name == "blank") {
+			text = text.replace(new RegExp('\\\\' + name, 'g'), "␣");
+			continue;
+		}
+		// 2091, 4958
+		if (name == "mark") {
+			text = text.replace(new RegExp('\\\\' + name, 'g'), String.fromCharCode(2091));
 			continue;
 		}
 		text = text.replace(new RegExp('\\\\' + name, 'g'), String.fromCharCode(913 + i + (i > 16)));
@@ -149,18 +158,18 @@ var originalClick;
 // allowed modes:
 // 'drawing'
 // 'coinfiring'
-var mode = 'drawing';
+// var mode = 'drawing';
 
-function updateMode() {
-	var element = document.getElementById('coinfiring');
-	if (element.checked) {
-		mode = 'coinfiring';
-		selectedObject = null;
-	}
-	else {
-		mode = 'drawing';
-	}
-}
+// function updateMode() {
+// 	var element = document.getElementById('coinfiring');
+// 	if (element.checked) {
+// 		mode = 'coinfiring';
+// 		selectedObject = null;
+// 	}
+// 	else {
+// 		mode = 'drawing';
+// 	}
+// }
 
 // Get an array of edges that are outgoing from this node
 // Used in coin firing
@@ -321,32 +330,40 @@ function snapNode(node) {
 
 }
 
-function showGrid() {
-	var showGrid = document.getElementById('showgrid').checked;
-	if (showGrid) {
-		var bw = 800;
-		var bh = 600;
-		var context = canvas.getContext("2d");
-	
-		for (var x = 0; x <= bw; x += gridSnapPadding) {
-			context.moveTo(0.5 + x + gridSnapPadding, gridSnapPadding);
-			context.lineTo(0.5 + x + gridSnapPadding, bh + gridSnapPadding);
-		}
-		for (var y = 0; y <= bh; y += 40) {
-			context.moveTo(gridSnapPadding, 0.5 + y + gridSnapPadding);
-			context.lineTo(bw + gridSnapPadding, 0.5 + y + gridSnapPadding);
-		}
-		context.strokeStyle = "black";
-		context.stroke();
-	}
+function resizeCanvas()
+{
+	var canvas = document.getElementById("canvas");
+	canvas.width = document.getElementById("canvaswidth").value;
+	canvas.height = document.getElementById("canvasheight").value;
 }
 
+// function showGrid() {
+// 	var showGrid = document.getElementById('showgrid').checked;
+// 	if (showGrid) {
+// 		var bw = 800;
+// 		var bh = 600;
+// 		var context = canvas.getContext("2d");
+	
+// 		for (var x = 0; x <= bw; x += gridSnapPadding) {
+// 			context.moveTo(0.5 + x + gridSnapPadding, gridSnapPadding);
+// 			context.lineTo(0.5 + x + gridSnapPadding, bh + gridSnapPadding);
+// 		}
+// 		for (var y = 0; y <= bh; y += 40) {
+// 			context.moveTo(gridSnapPadding, 0.5 + y + gridSnapPadding);
+// 			context.lineTo(bw + gridSnapPadding, 0.5 + y + gridSnapPadding);
+// 		}
+// 		context.strokeStyle = "black";
+// 		context.stroke();
+// 	}
+// }
+
 window.onload = function() {
+	resizeCanvas();
 
 	document.getElementById("clearCanvas").onclick = 
 	function(){
-		var element = document.getElementById('coinfiring');
-		element.checked = false;
+		// var element = document.getElementById('coinfiring');
+		// element.checked = false;
 		localStorage['fsm'] = '';
 		location.reload();
 	};
@@ -364,11 +381,11 @@ window.onload = function() {
 		location.reload();
 	};
 
-	document.getElementById('coinfiring').onclick = function() {
-		updateMode();
-	};
+	// document.getElementById('coinfiring').onclick = function() {
+	// 	updateMode();
+	// };
 
-	updateMode();
+	// updateMode();
 
 	canvas = document.getElementById('canvas');
 	restoreBackup();
@@ -377,53 +394,53 @@ window.onload = function() {
 	canvas.onmousedown = function(e) {
 		var mouse = crossBrowserRelativeMousePos(e);
 
-		if (mode === 'drawing') {
-			selectedObject = selectObject(mouse.x, mouse.y);
-			movingObject = false;
-			originalClick = mouse;
-			if(selectedObject != null) {
-				if(shift && selectedObject instanceof Node) {
-					currentLink = new SelfLink(selectedObject, mouse, checkDirected());
-				} else {
-					movingObject = true;
-					deltaMouseX = deltaMouseY = 0;
-					if(selectedObject.setMouseStart) {
-						selectedObject.setMouseStart(mouse.x, mouse.y);
-					}
-				}
-				resetCaret();
-			} else if(shift) {
-				currentLink = new TemporaryLink(mouse, mouse, checkDirected());
-			}
-		}
-		else if (mode === 'coinfiring') {
-			var currentObject = selectObject(mouse.x, mouse.y);
-			if (currentObject != null) {
-				if (currentObject instanceof Node) {
-					var chipsToFireAway = 0;
-					// Look for edges to adjacent nodes
-					var modifier = 1;
-					if (shift) {
-						modifier = -1;
-					}
-					var edges = leavingEdges(currentObject);
-					for (var i = 0; i < edges.length; i++) {
-						var edge = edges[i];
-						var otherNode = edge.nodeB;
-						if (otherNode === currentObject) {
-							otherNode = edge.nodeA;
-						}
-						var edgeWeight = 1;
-						if (edge.text !== '' && !isNaN(edge.text)) {
-							edgeWeight = parseInt(edge.text);
-						}
-						chipsToFireAway += edgeWeight;
-						incrementNode(otherNode, edgeWeight * modifier);
-					}
-					incrementNode(currentObject, -chipsToFireAway * modifier)
+		// if (mode === 'drawing') {
+		selectedObject = selectObject(mouse.x, mouse.y);
+		movingObject = false;
+		originalClick = mouse;
+		if(selectedObject != null) {
+			if(shift && selectedObject instanceof Node) {
+				currentLink = new SelfLink(selectedObject, mouse, checkDirected());
+			} else {
+				movingObject = true;
+				deltaMouseX = deltaMouseY = 0;
+				if(selectedObject.setMouseStart) {
+					selectedObject.setMouseStart(mouse.x, mouse.y);
 				}
 			}
+			resetCaret();
+		} else if(shift) {
+			currentLink = new TemporaryLink(mouse, mouse, checkDirected());
 		}
+		// }
+		// else if (mode === 'coinfiring') {
+		// 	var currentObject = selectObject(mouse.x, mouse.y);
+		// 	if (currentObject != null) {
+		// 		if (currentObject instanceof Node) {
+		// 			var chipsToFireAway = 0;
+		// 			// Look for edges to adjacent nodes
+		// 			var modifier = 1;
+		// 			if (shift) {
+		// 				modifier = -1;
+		// 			}
+		// 			var edges = leavingEdges(currentObject);
+		// 			for (var i = 0; i < edges.length; i++) {
+		// 				var edge = edges[i];
+		// 				var otherNode = edge.nodeB;
+		// 				if (otherNode === currentObject) {
+		// 					otherNode = edge.nodeA;
+		// 				}
+		// 				var edgeWeight = 1;
+		// 				if (edge.text !== '' && !isNaN(edge.text)) {
+		// 					edgeWeight = parseInt(edge.text);
+		// 				}
+		// 				chipsToFireAway += edgeWeight;
+		// 				incrementNode(otherNode, edgeWeight * modifier);
+		// 			}
+		// 			incrementNode(currentObject, -chipsToFireAway * modifier)
+		// 		}
+		// 	}
+		// }
 
 		draw();
 
@@ -440,21 +457,21 @@ window.onload = function() {
 	canvas.ondblclick = function(e) {
 		var mouse = crossBrowserRelativeMousePos(e);
 
-		if (mode === 'drawing') {
-			selectedObject = selectObject(mouse.x, mouse.y);
-			if(selectedObject == null) {
-				selectedObject = new Node(mouse.x, mouse.y);
-				nodes.push(selectedObject);
-				resetCaret();
-				draw();
-			} else if(selectedObject instanceof Node) {
-				selectedObject.isAcceptState = !selectedObject.isAcceptState;
-				draw();
-			}
+		// if (mode === 'drawing') {
+		selectedObject = selectObject(mouse.x, mouse.y);
+		if(selectedObject == null) {
+			selectedObject = new Node(mouse.x, mouse.y);
+			nodes.push(selectedObject);
+			resetCaret();
+			draw();
+		} else if(selectedObject instanceof Node) {
+			selectedObject.isAcceptState = !selectedObject.isAcceptState;
+			draw();
 		}
-		else if (mode === 'coinfiring') {
-			// Do nothing special
-		}
+		// }
+		// else if (mode === 'coinfiring') {
+		// 	// Do nothing special
+		// }
 	};
 
 	canvas.onmousemove = function(e) {
@@ -606,6 +623,7 @@ function crossBrowserRelativeMousePos(e) {
 	};
 }
 
+
 function output(text, showInput) {
 	var element = document.getElementById('output');
 	element.style.display = 'block';
@@ -614,36 +632,103 @@ function output(text, showInput) {
 }
 
 function saveAsPNG() {
+	// First, re-render the image with nothing selected.
 	var oldSelectedObject = selectedObject;
 	selectedObject = null;
 	drawUsing(canvas.getContext('2d'));
 	selectedObject = oldSelectedObject;
-	var pngData = canvas.toDataURL('image/png');
+
+	// Second, crop the image to only the part with content.
+	var bounds = getBoundingRect();
+	var croppedWidth = bounds[2] - bounds[0];
+	var croppedHeight = bounds[3] - bounds[1];
+	var croppedData = canvas.getContext('2d').getImageData(bounds[0], bounds[1], croppedWidth, croppedHeight);
+
+	// Finally, create a temporary canvas to generate PNG data.
+	var tmp = document.createElement("canvas");
+	tmp.width = croppedWidth;
+	tmp.height = croppedHeight;
+	tmp.getContext('2d').putImageData(croppedData, 0, 0);
+
+	var pngData = tmp.toDataURL('image/png');
 	document.location.href = pngData;
 }
 
+// Returns a bounding rectangle that contains all non-empty pixels. Returns an
+// array: [min x, min y, max x, max y].
+function getBoundingRect() {
+	var context = canvas.getContext('2d');
+	var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+	var indexToLocation = function(i) {
+		var pixelIndex = Math.floor(i / 4);
+		var col = Math.floor(pixelIndex % canvas.width);
+		var row = Math.floor(pixelIndex / canvas.width);
+		return [col, row];
+	};
+
+	// Search for non-blank pixels and keep track of the outermost locations to
+	// form the rectangle.
+	var maxX = -1;
+	var minX = canvas.width + 1;
+	var maxY = -1;
+	var minY = canvas.height + 1;
+	for (var i = 0; i < imageData.data.length; i++) {
+		if (imageData.data[i] != 0) {
+			var loc = indexToLocation(i);
+			var x = loc[0];
+			var y = loc[1];
+			if (x < minX) {
+				minX = x;
+			}
+			if (x > maxX) {
+				maxX = x;
+			}
+			if (y < minY) {
+				minY = y;
+			}
+			if (y > maxY) {
+				maxY = y;
+			}
+		}
+	}
+	// Return the full canvas if all pixels were blank.
+	if (minX >= maxX) {
+		return [0, 0, canvas.width, canvas.height];
+	}
+	// Add some padding around the image.
+	var padding = 2;
+	minX -= padding;
+	minY -= padding;
+	maxX += padding;
+	maxY += padding;
+	if (minX < 0) minX = 0;
+	if (minY < 0) minY = 0;
+	if (maxX > canvas.width) maxX = canvas.width;
+	if (maxY > canvas.width) maxY = canvas.width;
+	return [minX, minY, maxX, maxY];
+}
+
 function saveAsSVG() {
-	var exporter = new ExportAsSVG();
+	var bounds = getBoundingRect();
+	var exporter = new ExportAsSVG(bounds);
 	var oldSelectedObject = selectedObject;
 	selectedObject = null;
 	drawUsing(exporter);
 	selectedObject = oldSelectedObject;
 	var svgData = exporter.toSVG();
 	output(svgData);
-	// Chrome isn't ready for this yet, the 'Save As' menu item is disabled
-	// document.location.href = 'data:image/svg+xml;base64,' + btoa(svgData);
 }
 
 function saveAsSVGWhite() {
-	var exporter = new ExportAsSVGWhite();
+	var bounds = getBoundingRect();
+	var exporter = new ExportAsSVGWhite(bounds);
 	var oldSelectedObject = selectedObject;
 	selectedObject = null;
 	drawUsing(exporter);
 	selectedObject = oldSelectedObject;
 	var svgData = exporter.toSVG();
 	output(svgData);
-	// Chrome isn't ready for this yet, the 'Save As' menu item is disabled
-	// document.location.href = 'data:image/svg+xml;base64,' + btoa(svgData);
 }
 
 function saveAsLaTeX() {

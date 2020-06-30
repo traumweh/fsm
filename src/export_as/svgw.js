@@ -1,5 +1,5 @@
 // draw using this instead of a canvas and call toSVG() afterward
-function ExportAsSVGWhite() {
+function ExportAsSVGWhiteOld() {
 	this.fillStyle = 'black';
 	this.strokeStyle = 'black';
 	this.lineWidth = 1;
@@ -10,7 +10,9 @@ function ExportAsSVGWhite() {
 	this._transY = 0;
 
 	this.toSVG = function() {
-		return '<svg width="800" height="600" version="1.1" xmlns="http://www.w3.org/2000/svg">\n\t<rect width="100%" height="100%" fill="white" />\n' + this._svgData + '</svg>\n';
+		var canvaswidth = document.getElementById('canvaswidth').value;
+		var canvasheight = document.getElementById('canvasheight').value;
+		return `<svg width="${canvaswidth}" height="${canvasheight}" version="1.1" xmlns="http://www.w3.org/2000/svg">\n\t<rect width="100%" height="100%" fill="white" />\n` + this._svgData + '</svg>\n';
 	};
 
 	this.beginPath = function() {
@@ -78,6 +80,112 @@ function ExportAsSVGWhite() {
 		return c.measureText(text);
 	};
 	this.fillText = function(text, x, y) {
+		x += this._transX;
+		y += this._transY;
+		if(text.replace(' ', '').length > 0) {
+			this._svgData += '\t<text x="' + fixed(x, 3) + '" y="' + fixed(y, 3) + '" font-family="Times New Roman" font-size="20">' + textToXML(text) + '</text>\n';
+		}
+	};
+	this.translate = function(x, y) {
+		this._transX = x;
+		this._transY = y;
+	};
+
+	this.save = this.restore = this.clearRect = function(){};
+}
+
+function ExportAsSVGWhite(bounds) {
+	this.width = bounds[2] - bounds[0];
+	this.height = bounds[3] - bounds[1];
+	this.bounds = bounds;
+	this.fillStyle = 'black';
+	this.strokeStyle = 'black';
+	this.lineWidth = 1;
+	this.font = '12px Arial, sans-serif';
+	this._points = [];
+	this._svgData = '';
+	this._transX = 0;
+	this._transY = 0;
+
+	this.toSVG = function() {
+		var data = '<svg width="' + this.width + '" height="' + this.height + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
+		data +=	'\t<rect width="100%" height="100%" fill="white" />\n'
+		data += this._svgData;
+		data += '</svg>\n';
+		return data;
+	};
+
+	this.beginPath = function() {
+		this._points = [];
+	};
+	this.arc = function(x, y, radius, startAngle, endAngle, isReversed) {
+		x -= this.bounds[0];
+		y -= this.bounds[1];
+		x += this._transX;
+		y += this._transY;
+		var style = 'stroke="' + this.strokeStyle + '" stroke-width="' + this.lineWidth + '" fill="none"';
+
+		if(endAngle - startAngle == Math.PI * 2) {
+			this._svgData += '\t<ellipse ' + style + ' cx="' + fixed(x, 3) + '" cy="' + fixed(y, 3) + '" rx="' + fixed(radius, 3) + '" ry="' + fixed(radius, 3) + '"/>\n';
+		} else {
+			if(isReversed) {
+				var temp = startAngle;
+				startAngle = endAngle;
+				endAngle = temp;
+			}
+
+			if(endAngle < startAngle) {
+				endAngle += Math.PI * 2;
+			}
+
+			var startX = x + radius * Math.cos(startAngle);
+			var startY = y + radius * Math.sin(startAngle);
+			var endX = x + radius * Math.cos(endAngle);
+			var endY = y + radius * Math.sin(endAngle);
+			var useGreaterThan180 = (Math.abs(endAngle - startAngle) > Math.PI);
+			var goInPositiveDirection = 1;
+
+			this._svgData += '\t<path ' + style + ' d="';
+			this._svgData += 'M ' + fixed(startX, 3) + ',' + fixed(startY, 3) + ' '; // startPoint(startX, startY)
+			this._svgData += 'A ' + fixed(radius, 3) + ',' + fixed(radius, 3) + ' '; // radii(radius, radius)
+			this._svgData += '0 '; // value of 0 means perfect circle, others mean ellipse
+			this._svgData += +useGreaterThan180 + ' ';
+			this._svgData += +goInPositiveDirection + ' ';
+			this._svgData += fixed(endX, 3) + ',' + fixed(endY, 3); // endPoint(endX, endY)
+			this._svgData += '"/>\n';
+		}
+	};
+	this.moveTo = this.lineTo = function(x, y) {
+		x -= this.bounds[0];
+		y -= this.bounds[1];
+		x += this._transX;
+		y += this._transY;
+		this._points.push({ 'x': x, 'y': y });
+	};
+	this.stroke = function() {
+		if(this._points.length == 0) return;
+		this._svgData += '\t<polygon stroke="' + this.strokeStyle + '" stroke-width="' + this.lineWidth + '" points="';
+		for(var i = 0; i < this._points.length; i++) {
+			this._svgData += (i > 0 ? ' ' : '') + fixed(this._points[i].x, 3) + ',' + fixed(this._points[i].y, 3);
+		}
+		this._svgData += '"/>\n';
+	};
+	this.fill = function() {
+		if(this._points.length == 0) return;
+		this._svgData += '\t<polygon fill="' + this.fillStyle + '" stroke-width="' + this.lineWidth + '" points="';
+		for(var i = 0; i < this._points.length; i++) {
+			this._svgData += (i > 0 ? ' ' : '') + fixed(this._points[i].x, 3) + ',' + fixed(this._points[i].y, 3);
+		}
+		this._svgData += '"/>\n';
+	};
+	this.measureText = function(text) {
+		var c = canvas.getContext('2d');
+		c.font = '20px "Times New Romain", serif';
+		return c.measureText(text);
+	};
+	this.fillText = function(text, x, y) {
+		x -= this.bounds[0];
+		y -= this.bounds[1];
 		x += this._transX;
 		y += this._transY;
 		if(text.replace(' ', '').length > 0) {
