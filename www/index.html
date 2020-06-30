@@ -4,111 +4,6 @@
 		<title>Automata Designer</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="styles.css">
-		<!-- <style>
-			body {
-				text-align: center;
-				background: #DFDFDF;
-				margin: 0 30px 100px 30px;
-				font: 14px/18px 'Lucida Grande', 'Segoe UI', sans-serif;
-			}
-
-			h1 {
-				font: bold italic 50px Georgia, serif;
-			}
-
-			canvas {
-				display: block;
-				max-width: 800px;
-				background: white;
-				border-radius: 20px;
-				-moz-border-radius: 20px;
-				margin: 10px auto;
-			}
-
-			a {
-				color: black;
-			}
-
-			div {
-				margin: 30px auto;
-				text-align: left;
-				max-width: 800px;
-			}
-
-			.error {
-				display: block;
-				color: red;
-				font-size: 28px;
-				line-height: 30px;
-				padding: 30px;
-			}
-
-			p {
-				margin: 30px 0;
-				line-height: 20px;
-			}
-
-			.center {
-				text-align: center;
-			}
-
-			.centerelement {
-				margin: auto;
-			}
-
-			textarea {
-				display: none;
-				width: 75%;
-				height: 400px;
-				margin: 0 auto;
-			}
-
-			.onoffswitch {
-				position: relative; width: 90px;
-				-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-			}
-			.onoffswitch-checkbox {
-				display: none;
-			}
-			.onoffswitch-label {
-				display: block; overflow: hidden; cursor: pointer;
-				border: 2px solid #999999; border-radius: 20px;
-			}
-			.onoffswitch-inner {
-				display: block; width: 200%; margin-left: -100%;
-				transition: margin 0.3s ease-in 0s;
-			}
-			.onoffswitch-inner:before, .onoffswitch-inner:after {
-				display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-				font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-				box-sizing: border-box;
-			}
-			.onoffswitch-inner:before {
-				content: "ON";
-				padding-left: 10px;
-				background-color: #34A7C1; color: #FFFFFF;
-			}
-			.onoffswitch-inner:after {
-				content: "OFF";
-				padding-right: 10px;
-				background-color: #EEEEEE; color: #999999;
-				text-align: right;
-			}
-			.onoffswitch-switch {
-				display: inline; width: 18px; margin: 6px;
-				background: #FFFFFF;
-				position: absolute; top: 0; bottom: 0;
-				right: 56px;
-				border: 2px solid #999999; border-radius: 20px;
-				transition: all 0.3s ease-in 0s; 
-			}
-			.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-				margin-left: 0;
-			}
-			.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-				right: 0px; 
-			}
-		</style> -->
 		<script src="fsm.js"></script>
 		<script>
 			/*
@@ -166,10 +61,9 @@
 		<div class="center">
 			<input type="checkbox" id="directed" checked> Directed Edges
 			<input type="checkbox" id="gridsnap" checked> Snap to Grid
-			<input type="checkbox" id="coinfiring"> Chip Firing Mode
-			<!-- WIP
-			<input type="checkbox" id="showgrid" onclick="showGrid()"> Show Grid
-			-->
+			<input type="checkbox" id="rectorcirc"> Rectangle instead of Circle
+			<!-- <input type="checkbox" id="coinfiring"> Chip Firing Mode -->
+			<!-- <input type="checkbox" id="showgrid" onclick="showGrid()"> Show Grid -->
 			<br/>
 			<br/>
 			<button id="clearNodes">Clear all Nodes</button>
@@ -188,6 +82,8 @@
 			<b>Add an arrow:</b> shift-drag on the canvas<br>
 			<b>Move something:</b> drag it around<br>
 			<b>Delete something:</b> click it and press the delete key (not the backspace key)<br>
+			<b>Canvas Width:</b> <input type="number" value="800" min="800" max="8000" id="canvaswidth" onchange="resizeCanvas()" /><br>
+			<b>Canvas Height:</b> <input type="number" value="600" min="600" max="6000" id="canvasheight" onchange="resizeCanvas()" /><br>
 			<b>Circle radius:</b> <input type="range" height="17px" id="rangeSlider" min="20" max="80" value="30" oninput="javascript:radiusChanged();" onchange="javascript:radiusChanged();" /><br>
 			<b>Special Characters and Stuff</b> <a id="showSpecial" href="javascript:showSpecial()">[show]</a></p>
 			<ul id="specialChars" class="specialChars" style="display: none; line-height: 1.5;">
@@ -196,6 +92,8 @@
 				<li><b>Arrows: </b> ⭢ (\rightarrow), ⇒ (\Rightarrow), ⭠ (\leftarrow), ⇐ (\Leftarrow)</li>
 				<li><b>Concatenation: </b> ∘ (\circ), ⁺ (\plus)</li>
 				<li><b>Set-Stuff: </b> ∅ (\emptyset), ∪ (\cup), ∩ (\cap)</li>
+				<li><b>Blank-Character: </b> ␣ (\blank</li>
+				<li><b>Mark a char: </b> <span style="color: #888">◌</span>&#2091; (\mark)</li>
 			</ul>
 		</div>
 		<br>
