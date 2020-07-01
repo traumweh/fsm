@@ -110,7 +110,7 @@ function ExportAsSVG(bounds) {
 	this.toSVG = function() {
 		var data = '<?xml version="1.0" standalone="no"?>\n';
 		data += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n\n';
-		data += '<svg width="' + this.width + '" height="' + this.height + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
+		data += '<svg width="' + document.getElementById('canvaswidth').value + '" height="' + document.getElementById('canvasheight').value + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
 		data += this._svgData;
 		data += '</svg>\n';
 		return data;

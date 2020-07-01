@@ -108,7 +108,7 @@ function ExportAsSVGWhite(bounds) {
 	this._transY = 0;
 
 	this.toSVG = function() {
-		var data = '<svg width="' + this.width + '" height="' + this.height + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
+		var data = '<svg width="' + document.getElementById('canvaswidth').value + '" height="' + document.getElementById('canvasheight').value + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
 		data +=	'\t<rect width="100%" height="100%" fill="white" />\n'
 		data += this._svgData;
 		data += '</svg>\n';
