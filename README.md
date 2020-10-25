@@ -40,25 +40,25 @@ Original by [Evan Wallace](http://madebyevan.com/fsm) in 2010 under the MIT lice
 |What|How|Example|
 |:---|:---|:--:|
 | Numbers | Undersore before number | $x\_0 \rarr x_0$ |
-| Latin letters<sup>[1]</sup> | Underscore before letter | $x\_a \rarr x_a$ |
-| Greek letters<sup>[2]</sup> | Underscore + Questionmark before letter | $x\_?phi \rarr x_\phi$ |
+| Latin letters<sup id="r1">[1](#latin1)</sup> | Underscore before letter | $x\_a \rarr x_a$ |
+| Greek letters<sup id="r2">[2](#greek1)</sup> | Underscore + Questionmark before letter | $x\_?phi \rarr x_\phi$ |
 | Math chars | `_+`<br>`_-`<br>`_=`<br>`_(`<br>`_)` | ₊<br>₋<br>₌<br>₍<br>₎ |
 
 ### Superscript
 |What|How|Example|
 |:---|:---|:--:|
 | Numbers | Circumflex before number | $x\char`\^0 \rarr x^0$ |
-| Latin letters<sup>[3]</sup> | Circumflex before letter | $x\char`\^a \rarr x^a; \quad x\char`\^A \rarr x^A$ |
-| Greek letters<sup>[4]</sup> | Circumflex + Questionmark before letter | $x\char`\^?phi \rarr x^\phi; \quad x\char`\^?Phi \rarr x^\Phi$ |
+| Latin letters<sup id="r3">[3](#latin2)</sup> | Circumflex before letter | $x\char`\^a \rarr x^a; \quad x\char`\^A \rarr x^A$ |
+| Greek letters<sup id="r4">[4](#greek2)</sup> | Circumflex + Questionmark before letter | $x\char`\^?phi \rarr x^\phi; \quad x\char`\^?Phi \rarr x^\Phi$ |
 | Math chars | `^+`<br>`^-`<br>`^=`<br>`^(`<br>`^)` | ⁺<br>⁻<br>⁼<br>⁽<br>⁾ |
 
 <br><br><br>
 
 ---
-<a name="latin1">[1]</a>: Supported subscript Latin letters: a, e, h, i, j, k, l, m, n, o, p, r, s, t, u, v, x, X, y
+<a id="latin1">[1]</a>: Supported subscript Latin letters: a, e, h, i, j, k, l, m, n, o, p, r, s, t, u, v, x, X, y [↩](#r1)
 
-<a name="greek1">[2]</a>: Supported subscript Greek letters: beta, rho, phi
+<a id="greek1">[2]</a>: Supported subscript Greek letters: beta, rho, phi [↩](#r2)
 
-<a name="latin2">[3]</a>: Supported superscript Latin letters: a, A, b, B, c, C, d, D, e, E, f, F, g, G, h, H, i, I, j, J, k, K, l, L, m, M, n, N, o, O, p, P, r, R, s, S, t, T, u, U, v, V, w, W, x, X, y, Y, z, Z
+<a id="latin2">[3]</a>: Supported superscript Latin letters: a, A, b, B, c, C, d, D, e, E, f, F, g, G, h, H, i, I, j, J, k, K, l, L, m, M, n, N, o, O, p, P, r, R, s, S, t, T, u, U, v, V, w, W, x, X, y, Y, z, Z [↩](#r3)
 
-<a name="greek2">[4]</a>: Supported superscript Greek letters: alpha, beta, gamma, delta, epsilon, theta, iota, phi, Phi
+<a id="greek2">[4]</a>: Supported superscript Greek letters: alpha, beta, gamma, delta, epsilon, theta, iota, phi, Phi [↩](#r4)
