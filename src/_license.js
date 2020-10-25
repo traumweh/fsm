@@ -1,6 +1,6 @@
 /*
-Automata Designer
-License MIT License
+Automata Designer (https://traumweh.tk/fsm/)
+License: MIT License
 
 Copyright (c) 2020 Traumweh
 
