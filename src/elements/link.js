@@ -38,8 +38,8 @@ Link.prototype.getEndPointsAndCircle = function() {
 	if(this.perpendicularPart == 0) {
 		var midX = (this.nodeA.x + this.nodeB.x) / 2;
 		var midY = (this.nodeA.y + this.nodeB.y) / 2;
-		var start = this.nodeA.closestPointOnCircle(midX, midY);
-		var end = this.nodeB.closestPointOnCircle(midX, midY);
+		var start = this.nodeA.closestPointOnEllipse(midX, midY);
+		var end = this.nodeB.closestPointOnEllipse(midX, midY);
 		return {
 			'hasCircle': false,
 			'startX': start.x,
@@ -48,16 +48,40 @@ Link.prototype.getEndPointsAndCircle = function() {
 			'endY': end.y,
 		};
 	}
+
 	var anchor = this.getAnchorPoint();
 	var circle = circleFromThreePoints(this.nodeA.x, this.nodeA.y, this.nodeB.x, this.nodeB.y, anchor.x, anchor.y);
+
 	var isReversed = (this.perpendicularPart > 0);
 	var reverseScale = isReversed ? 1 : -1;
-	var startAngle = Math.atan2(this.nodeA.y - circle.y, this.nodeA.x - circle.x) - reverseScale * nodeRadius / circle.radius;
-	var endAngle = Math.atan2(this.nodeB.y - circle.y, this.nodeB.x - circle.x) + reverseScale * nodeRadius / circle.radius;
+
+	var startAngle = Math.atan2(this.nodeA.y - circle.y, this.nodeA.x - circle.x) - reverseScale * 30 / circle.radius;
+	var endAngle = Math.atan2(this.nodeB.y - circle.y, this.nodeB.x - circle.x) + reverseScale * 30 / circle.radius;
+
 	var startX = circle.x + circle.radius * Math.cos(startAngle);
 	var startY = circle.y + circle.radius * Math.sin(startAngle);
 	var endX = circle.x + circle.radius * Math.cos(endAngle);
 	var endY = circle.y + circle.radius * Math.sin(endAngle);
+
+	if (typeof(this.nodeA.type) == "undefined" || this.nodeA.type == "ellipse") {
+		start = approxEllipseCircleIntersection(30, this.nodeA.width, circle.x - this.nodeA.x, circle.y - this.nodeA.y, circle.radius, {x: startX - this.nodeA.x, y: startY - this.nodeA.y});
+	} else {
+		var start = getRectangleCircleIntersection(30, this.nodeA.width, circle.x - this.nodeA.x, circle.y - this.nodeA.y, circle.radius, {x: startX - this.nodeA.x, y: startY - this.nodeA.y});
+	}
+	startX = start.x + this.nodeA.x;
+	startY = start.y + this.nodeA.y;
+
+	if (typeof(this.nodeB.type) == "undefined" || this.nodeB.type == "ellipse") {
+		end = approxEllipseCircleIntersection(30, this.nodeB.width, circle.x - this.nodeB.x, circle.y - this.nodeB.y, circle.radius, {x: endX - this.nodeB.x, y: endY - this.nodeB.y});
+	} else {
+		var end = getRectangleCircleIntersection(30, this.nodeB.width, circle.x - this.nodeB.x, circle.y - this.nodeB.y, circle.radius, {x: endX - this.nodeB.x, y: endY - this.nodeB.y});
+	}
+	endX = end.x + this.nodeB.x;
+	endY = end.y + this.nodeB.y;
+
+	var startAngle = Math.atan2(this.nodeA.y - circle.y, this.nodeA.x - circle.x) - reverseScale * (Math.sqrt(Math.abs(start.x**2 + start.y**2))) / circle.radius;
+	var endAngle = Math.atan2(this.nodeB.y - circle.y, this.nodeB.x - circle.x) + reverseScale * (Math.sqrt(Math.abs(end.x**2 + end.y**2))) / circle.radius;
+
 	return {
 		'hasCircle': true,
 		'startX': startX,
@@ -71,7 +95,7 @@ Link.prototype.getEndPointsAndCircle = function() {
 		'circleRadius': circle.radius,
 		'reverseScale': reverseScale,
 		'isReversed': isReversed,
-	};
+	}
 };
 
 Link.prototype.draw = function(c) {
