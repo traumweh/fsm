@@ -51,6 +51,20 @@ function ExportAsLaTeX() {
 			this._texData += '\\draw [' + this.strokeStyle + '] (' + fixed(x + radius * Math.cos(startAngle), 3) + ',' + fixed(-y + radius * Math.sin(startAngle), 3) + ') arc (' + fixed(startAngle * 180 / Math.PI, 5) + ':' + fixed(endAngle * 180 / Math.PI, 5) + ':' + fixed(radius, 3) + ');\n';
 		}
 	};
+	this.rect = function(x, y, width, height) {
+		x *= this._scale;
+		y *= this._scale;
+		width *= this._scale;
+		height *= this._scale;
+		this._texData += `\\draw [${this.strokeStyle}] (${x},${-y}) rectangle ++(${width},${-height});\n`;
+	};
+	this.ellipse = function(x, y, hradius, vradius, rotation, startAngle, endAngle, isReversed) {
+		x *= this._scale;
+		y *= this._scale;
+		hradius *= this._scale;
+		vradius *= this._scale;
+		this._texData += '\\draw [' + this.strokeStyle + '] (' + fixed(x, 3) + ',' + fixed(-y, 3) + ') ellipse (' + fixed(hradius, 3) + ' and ' + fixed(vradius, 3) + ');\n';
+	};
 	this.moveTo = this.lineTo = function(x, y) {
 		x *= this._scale;
 		y *= this._scale;
@@ -97,7 +111,7 @@ function ExportAsLaTeX() {
 			}
 			x *= this._scale;
 			y *= this._scale;
-			this._texData += '\\draw (' + fixed(x, 2) + ',' + fixed(-y, 2) + ') node ' + nodeParams + '{$' + originalText.replace(/ /g, '\\mbox{ }') + '$};\n';
+			this._texData += '\\draw (' + fixed(x, 2) + ',' + fixed(-y, 2) + ') node ' + nodeParams + '{$' + originalText.replace(/ /g, '\\mbox{ }').replace(/\{/g, '\\\{').replace(/\}/g, '\\\}').replace(/\$/g, '\\$').replace(/%/, '\\%') + '$};\n';
 		}
 	};
 
