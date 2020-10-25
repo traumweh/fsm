@@ -1,17 +1,12 @@
-var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega', 'Rightarrow', 'rightarrow', 'Leftarrow', 'leftarrow', 'plus', 'circ', 'cup', 'cap', 'emptyset', 'blank', 'mark'];
-
-/*
- Return true if the user has directed edges on, false otherwise.
- */
 function checkDirected() {
 	var val = document.getElementById('directed').checked;
 	return val;
 };
 
-
+var special = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega', 'Rightarrow', 'rightarrow', 'Leftarrow', 'leftarrow', 'plus', 'circ', 'cup', 'Cup', 'cap', 'emptyset', 'blank', 'mark'];
 function convertLatexShortcuts(text) {
-	for(var i = 0; i < greekLetterNames.length; i++) {
-		var name = greekLetterNames[i];
+	for(var i = 0; i < special.length; i++) {
+		var name = special[i];
 		if (name == "Rightarrow") {
 			text = text.replace(new RegExp('\\\\' + name, 'g'), "⇒");
 			continue;	
@@ -40,6 +35,10 @@ function convertLatexShortcuts(text) {
 			text = text.replace(new RegExp('\\\\' + name, 'g'), "∪");
 			continue;	
 		}
+		if (name == "Cup") {
+			text = text.replace(new RegExp('\\\\' + name, 'g'), "☕");
+			continue;
+		}
 		if (name == "cap") {
 			text = text.replace(new RegExp('\\\\' + name, 'g'), "∩");
 			continue;	
@@ -57,13 +56,28 @@ function convertLatexShortcuts(text) {
 			text = text.replace(new RegExp('\\\\' + name, 'g'), String.fromCharCode(2091));
 			continue;
 		}
+		regex1 = /(?!_\?)/;
 		text = text.replace(new RegExp('\\\\' + name, 'g'), String.fromCharCode(913 + i + (i > 16)));
 		text = text.replace(new RegExp('\\\\' + name.toLowerCase(), 'g'), String.fromCharCode(945 + i + (i > 16)));
 	}
-
+	
 	// subscripts
 	for(var i = 0; i < 10; i++) {
 		text = text.replace(new RegExp('_' + i, 'g'), String.fromCharCode(8320 + i));
+	}
+	var subscript = ['ₐ', 'ₑ', 'ₕ', 'ᵢ', 'ⱼ', 'ₖ', 'ₗ', 'ₘ', 'ₙ', 'ₒ', 'ₚ', 'ᵣ', 'ₛ', 'ₜ', 'ᵤ', 'ᵥ', 'ₓ', 'ᵧ', 'ᵪ', '₊', '₋', '₌', '₍', '₎', 'ᵦ', 'ᵨ', 'ᵩ'];
+	var subnormal = ['a', 'e', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'x', 'y', 'X', '\\+', '-', '=', '\\(', '\\)', '\\?beta', '\\?rho', '\\?phi'];
+	
+	for(var i = 0; i < subnormal.length; i++) {
+		text = text.replace(new RegExp('_' + subnormal[i], 'g'), subscript[i])
+	}
+	
+	// superscript
+	var superscript = ['ᵃ', 'ᵇ', 'ᶜ', 'ᵈ', 'ᵉ', 'ᶠ', 'ᵍ', 'ʰ', 'ⁱ', 'ʲ', 'ᵏ', 'ˡ', 'ᵐ', 'ⁿ', 'ᵒ', 'ᵖ', 'ʳ', 'ˢ', 'ᵗ', 'ᵘ', 'ᵛ', 'ʷ', 'ˣ', 'ʸ', 'ᶻ', 'ᴬ', 'ᴮ', 'ᶜ', 'ᴰ', 'ᴱ', 'ᶠ', 'ᴳ', 'ᴴ', 'ᴵ', 'ᴶ', 'ᴷ', 'ᴸ', 'ᴹ', 'ᴺ', 'ᴼ', 'ᴾ', 'ᴿ', 'ˢ', 'ᵀ', 'ᵁ', 'ⱽ', 'ᵂ', 'ᵡ', 'ʸ', 'ᶻ', '⁺', '⁻', '⁼', '⁽', '⁾', 'ᵅ', 'ᵝ', 'ᵞ', 'ᵟ', 'ᵋ', 'ᶿ', 'ᶥ', 'ᶲ', 'ᵠ', '⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+	var supernormal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '\\+', '-', '=', '\\(', '\\)', '\\?alpha', '\\?beta', '\\?gamma', '\\?delta', '\\?epsilon', '\\?theta', '\\?iota', '\\?Phi', '\\?phi', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+	for(var i = 0; i < supernormal.length; i++) {
+		text = text.replace(new RegExp('\\^' + supernormal[i], 'g'), superscript[i])
 	}
 
 	return text;
@@ -143,7 +157,6 @@ function resetCaret() {
 }
 
 var canvas;
-var nodeRadius = 30;
 var nodes = [];
 var links = [];
 
@@ -155,112 +168,6 @@ var selectedObject = null; // either a Link or a Node
 var currentLink = null; // a Link
 var movingObject = false;
 var originalClick;
-// allowed modes:
-// 'drawing'
-// 'coinfiring'
-// var mode = 'drawing';
-
-// function updateMode() {
-// 	var element = document.getElementById('coinfiring');
-// 	if (element.checked) {
-// 		mode = 'coinfiring';
-// 		selectedObject = null;
-// 	}
-// 	else {
-// 		mode = 'drawing';
-// 	}
-// }
-
-// Get an array of edges that are outgoing from this node
-// Used in coin firing
-function leavingEdges(node) {
-	var edges = [];
-	for(var i = 0; i < links.length; i++) {
-		var nodeACheck = links[i].nodeA == node;
-		var nodeBCheck = (!links[i].directed) && links[i].nodeB == node;
-		if(nodeACheck || nodeBCheck) {
-			edges.push(links[i]);
-		}
-	}
-	return edges;
-}
-
-// Change the value of the node by a given amount
-// Used in coin firing
-function incrementNode(node, amount) {
-	var nodeText = node.text;
-	var resultText = '';
-	if (nodeText === '') {
-		nodeText = '0';
-	}
-	// strings that are not valid numbers are NaN
-	if (!isNaN(nodeText)) {
-		var nodeValue = parseInt(nodeText);
-		var newValue = nodeValue + amount;
-		resultText = newValue.toString();
-	}
-	else {
-		var lastIndexOf = function(str, substr) {
-			// Reverse string
-			var rev = str.split("").reverse().join("");
-			var revIndex = rev.indexOf(substr);
-			if (revIndex < 0) {
-				return revIndex;
-			}
-			else {
-				return str.length - revIndex - 1;
-			}
-		};
-		var added = false;
-		// Look for plus sign
-		var plusIndex = nodeText.lastIndexOf('+');
-		var minusIndex = nodeText.lastIndexOf('-');
-		var beforeSign = nodeText;
-		var startValue = 0;
-		// If plus exists see if everything after plus is number
-		if (plusIndex >= 0) {
-			var afterPlus = nodeText.substring(plusIndex + 1);
-			if (afterPlus === '') {
-				afterPlus = '0';
-			}
-			if (!isNaN(afterPlus)) {
-				added = true;
-				beforeSign = nodeText.substring(0, plusIndex);
-				startValue = parseInt(afterPlus);
-			}
-		}
-		// Look for minus sign
-		if (!added && minusIndex >= 0) {
-			var afterMinus = nodeText.substring(minusIndex + 1);
-			if (afterMinus === '') {
-				afterMinus = '0';
-			}
-			if (!isNaN(afterMinus)) {
-				added = true;
-				beforeSign = nodeText.substring(0, minusIndex);
-				startValue = -parseInt(afterMinus);
-			}
-		}
-		var newValue = startValue + amount;
-		if (newValue > 0) {
-			resultText = beforeSign + '+' + newValue;
-		}
-		else if (newValue < 0) {
-			resultText = beforeSign + '-' + (-newValue);
-		}
-		else {
-			resultText = beforeSign;
-		}
-	}
-	node.text = resultText;
-}
-
-function radiusChanged() {
-	var newRadius = document.getElementById("rangeSlider").value;
-	newRadius = parseInt(newRadius);
-	nodeRadius = newRadius;
-	draw();
-}
 
 function drawUsing(c) {
 	c.clearRect(0, 0, canvas.width, canvas.height);
@@ -337,33 +244,11 @@ function resizeCanvas()
 	canvas.height = document.getElementById("canvasheight").value;
 }
 
-// function showGrid() {
-// 	var showGrid = document.getElementById('showgrid').checked;
-// 	if (showGrid) {
-// 		var bw = 800;
-// 		var bh = 600;
-// 		var context = canvas.getContext("2d");
-	
-// 		for (var x = 0; x <= bw; x += gridSnapPadding) {
-// 			context.moveTo(0.5 + x + gridSnapPadding, gridSnapPadding);
-// 			context.lineTo(0.5 + x + gridSnapPadding, bh + gridSnapPadding);
-// 		}
-// 		for (var y = 0; y <= bh; y += 40) {
-// 			context.moveTo(gridSnapPadding, 0.5 + y + gridSnapPadding);
-// 			context.lineTo(bw + gridSnapPadding, 0.5 + y + gridSnapPadding);
-// 		}
-// 		context.strokeStyle = "black";
-// 		context.stroke();
-// 	}
-// }
-
 window.onload = function() {
 	resizeCanvas();
 
 	document.getElementById("clearCanvas").onclick = 
 	function(){
-		// var element = document.getElementById('coinfiring');
-		// element.checked = false;
 		localStorage['fsm'] = '';
 		location.reload();
 	};
@@ -381,12 +266,6 @@ window.onload = function() {
 		location.reload();
 	};
 
-	// document.getElementById('coinfiring').onclick = function() {
-	// 	updateMode();
-	// };
-
-	// updateMode();
-
 	canvas = document.getElementById('canvas');
 	restoreBackup();
 	draw();
@@ -394,7 +273,6 @@ window.onload = function() {
 	canvas.onmousedown = function(e) {
 		var mouse = crossBrowserRelativeMousePos(e);
 
-		// if (mode === 'drawing') {
 		selectedObject = selectObject(mouse.x, mouse.y);
 		movingObject = false;
 		originalClick = mouse;
@@ -412,35 +290,6 @@ window.onload = function() {
 		} else if(shift) {
 			currentLink = new TemporaryLink(mouse, mouse, checkDirected());
 		}
-		// }
-		// else if (mode === 'coinfiring') {
-		// 	var currentObject = selectObject(mouse.x, mouse.y);
-		// 	if (currentObject != null) {
-		// 		if (currentObject instanceof Node) {
-		// 			var chipsToFireAway = 0;
-		// 			// Look for edges to adjacent nodes
-		// 			var modifier = 1;
-		// 			if (shift) {
-		// 				modifier = -1;
-		// 			}
-		// 			var edges = leavingEdges(currentObject);
-		// 			for (var i = 0; i < edges.length; i++) {
-		// 				var edge = edges[i];
-		// 				var otherNode = edge.nodeB;
-		// 				if (otherNode === currentObject) {
-		// 					otherNode = edge.nodeA;
-		// 				}
-		// 				var edgeWeight = 1;
-		// 				if (edge.text !== '' && !isNaN(edge.text)) {
-		// 					edgeWeight = parseInt(edge.text);
-		// 				}
-		// 				chipsToFireAway += edgeWeight;
-		// 				incrementNode(otherNode, edgeWeight * modifier);
-		// 			}
-		// 			incrementNode(currentObject, -chipsToFireAway * modifier)
-		// 		}
-		// 	}
-		// }
 
 		draw();
 
@@ -457,10 +306,14 @@ window.onload = function() {
 	canvas.ondblclick = function(e) {
 		var mouse = crossBrowserRelativeMousePos(e);
 
-		// if (mode === 'drawing') {
 		selectedObject = selectObject(mouse.x, mouse.y);
 		if(selectedObject == null) {
 			selectedObject = new Node(mouse.x, mouse.y);
+
+			// standardvalue from checkbox to remember if rectangle or ellipse
+			if (!document.getElementById('rectangleorellipse').checked) selectedObject.type = "ellipse";
+			else selectedObject.type = "rectangle";
+
 			nodes.push(selectedObject);
 			resetCaret();
 			draw();
@@ -468,10 +321,6 @@ window.onload = function() {
 			selectedObject.isAcceptState = !selectedObject.isAcceptState;
 			draw();
 		}
-		// }
-		// else if (mode === 'coinfiring') {
-		// 	// Do nothing special
-		// }
 	};
 
 	canvas.onmousemove = function(e) {
@@ -493,9 +342,9 @@ window.onload = function() {
 				if(targetNode == selectedObject) {
 					currentLink = new SelfLink(selectedObject, mouse, checkDirected());
 				} else if(targetNode != null) {
-					currentLink = new Link(selectedObject, targetNode, checkDirected());
+					currentLink = new Link(selectedObject, targetNode, checkDirected(), mouse.x, mouse.y);
 				} else {
-					currentLink = new TemporaryLink(selectedObject.closestPointOnCircle(mouse.x, mouse.y), mouse, checkDirected());
+					currentLink = new TemporaryLink(selectedObject.closestPointOnEllipse(mouse.x, mouse.y), mouse, checkDirected());
 				}
 			}
 			draw();
@@ -558,6 +407,11 @@ document.onkeydown = function(e) {
 			}
 			selectedObject = null;
 			draw();
+		}
+	} else if(key == 17) { // control key
+		if(selectedObject instanceof Node) {
+			if (selectedObject.type == 'ellipse' || (typeof(selectedObject.type) == 'undefined' && document.getElementById('rectangleorellipse').checked)) selectedObject.type = 'rectangle';
+			else selectedObject.type = 'ellipse';
 		}
 	}
 };
