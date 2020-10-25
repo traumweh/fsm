@@ -1,6 +1,10 @@
 # Graph / Finite State Machine Designer
 
 Update by [Traumweh](https://traumweh.tk) in 2020.
+- State Types: State can be rectangles or ellipses, which get wider to fit increasing text
+- Default Type: Checkbox under canvas switches between ellipse (default) and rectangle
+- Mixed Types: State's type can be toggled independently
+- Special characters: More sup-, superscript chars, useful chars like arrows, regex stuff and more
 
 Update by [Markus Feng](https://markusfeng.com) in 2019.
 
@@ -16,6 +20,7 @@ Original by [Evan Wallace](http://madebyevan.com/fsm) in 2010 under the MIT lice
 | :--- | :-- |
 | Add state | Double-click on canvas |
 | Make accept state | Double-click on state |
+| Toggle type of state | Left-click state and press ctrl |
 | Add arrow | Shift-drag on canvas |
 | Move something | Drag it around |
 | Delete something | Left-click it and press Delete key |
