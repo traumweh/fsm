@@ -11,6 +11,7 @@ function restoreBackup() {
 			var node = new Node(backupNode.x, backupNode.y);
 			node.isAcceptState = backupNode.isAcceptState;
 			node.text = backupNode.text;
+			node.type = backupNode.type; // rectangle or ellipse
 			nodes.push(node);
 		}
 		for(var i = 0; i < backup.links.length; i++) {
@@ -39,7 +40,6 @@ function restoreBackup() {
 		}
 		document.getElementById('canvaswidth').value = backup['settings']['width'];
 		document.getElementById('canvasheight').value = backup['settings']['height'];
-		document.getElementById('rangeSlider').value = backup['settings']['nodesize'];
 	} catch(e) {
 		localStorage['fsm'] = '';
 	}
@@ -50,7 +50,7 @@ function backupData() {
 	var backup = {
 		'nodes': [],
 		'links': [],
-		'settings':  {'width': document.getElementById('canvaswidth').value, 'height': document.getElementById('canvasheight').value, 'nodesize': document.getElementById('rangeSlider').value},
+		'settings':  {'width': document.getElementById('canvaswidth').value, 'height': document.getElementById('canvasheight').value/*, 'nodesize': document.getElementById('rangeSlider').value*/},
 	};
 
 	for(var i = 0; i < nodes.length; i++) {
@@ -60,6 +60,7 @@ function backupData() {
 			'y': node.y,
 			'text': node.text,
 			'isAcceptState': node.isAcceptState,
+			'type': node.type,
 		};
 		backup.nodes.push(backupNode);
 	}
