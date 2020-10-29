@@ -505,7 +505,8 @@ function saveAsPNG() {
 	tmp.getContext('2d').putImageData(croppedData, 0, 0);
 
 	var pngData = tmp.toDataURL('image/png');
-	document.location.href = pngData;
+	var win = window.open();
+	win.document.write('<iframe src="' + pngData  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
 }
 
 // Returns a bounding rectangle that contains all non-empty pixels. Returns an
